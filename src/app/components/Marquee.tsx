@@ -64,7 +64,7 @@ export default function Marquee() {
         border: "1px solid #ddd",
         padding: "8px 0",
         fontSize: "1.1rem",
-        height: "100%",
+        height: "10%",
         display: "flex",
         alignItems: "center",
         fontWeight: "bold",

@@ -132,9 +132,6 @@ export default function Update() {
                     .replace("/", "")}/embed`}
                   width="280"
                   height="400"
-                  frameBorder="0"
-                  scrolling="no"
-                  allowTransparency={true}
                   style={{ border: "none", width: "280px", height: "400px" }}
                   title={`Instagram post ${idx + 1}`}
                 ></iframe>

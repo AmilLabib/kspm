@@ -12,17 +12,11 @@ export default function Home() {
       <div
         style={{ height: "100vh", display: "flex", flexDirection: "column" }}
       >
-        <div style={{ flex: 1 }}>
-          <Navbar />
-        </div>
-        <div style={{ flex: 1 }}>
-          <Hero />
-        </div>
-        <div style={{ flex: 1 }}>
-          <Marquee />
-        </div>
+        <Navbar />
+        <Hero />
+        <Marquee />
       </div>
-      <div style={{ padding: "0 10rem" }}>
+      <div className="px-5">
         <Update />
         <section id="portfolio">
           <Portfolio />

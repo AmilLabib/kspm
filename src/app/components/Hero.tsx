@@ -4,7 +4,7 @@ const Hero: React.FC = () => {
   return (
     <section
       style={{
-        height: "100%",
+        height: "80%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
