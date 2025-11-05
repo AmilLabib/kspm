@@ -91,30 +91,6 @@ export default function Footer() {
                   About Us
                 </a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  style={{ color: "inherit", textDecoration: "none" }}
-                >
-                  Carrier
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  style={{ color: "inherit", textDecoration: "none" }}
-                >
-                  We are hiring
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  style={{ color: "inherit", textDecoration: "none" }}
-                >
-                  Blog
-                </a>
-              </li>
             </ul>
           </div>
 

@@ -107,35 +107,16 @@ const MultiPieChart: React.FC<MultiPieChartProps> = ({
 
 const Portfolio: React.FC = () => {
   return (
-    <div className="flex flex-row gap-8 items-start">
+    <div className="flex flex-col lg:flex-row items-start w-full lg:max-w-[80vw] mt-20 mx-auto justify-between">
       {/* 9 columns */}
-      <div className="flex-1 basis-0 min-w-0">
-        <h1
-          style={{
-            fontSize: "2rem",
-            fontWeight: "bold",
-            marginBottom: "0.5rem",
-          }}
-        >
+      <div className="mx-auto flex-1 w-[90vw] lg:w-2/3">
+        <h1 className="text-center lg:text-left text-2xl lg:text-[2rem] font-bold mb-2">
           Portfolio
         </h1>
-        <h2
-          style={{
-            fontSize: "2rem",
-            fontWeight: "normal",
-            marginBottom: "0.5rem",
-          }}
-        >
+        <h2 className="text-center text-lg lg:text-3xl lg:text-left font-normal mb-2">
           Asset Under Management (AUM)
         </h2>
-        <p
-          style={{
-            fontSize: "1rem",
-            fontWeight: "normal",
-            color: "#4B5563",
-            marginBottom: "1rem",
-          }}
-        >
+        <p className="text-justify lg:text-left text-base font-normal text-gray-600 mb-4">
           Portofolio Bersama KSPM merupakan kumpulan aset investasi yang
           dikelola secara kolektif oleh anggota sebagai sarana pembelajaran
           sekaligus praktik nyata dalam dunia pasar modal. Melalui portofolio
@@ -144,86 +125,47 @@ const Portfolio: React.FC = () => {
         </p>
 
         {/* Total pill */}
-        <div className="flex flex-row items-center gap-4 mt-10">
-          <h1
-            style={{
-              fontSize: "2rem",
-              fontWeight: "bold",
-              margin: 0,
-              lineHeight: "1.5",
-              display: "flex",
-              alignItems: "center",
-              height: "3rem",
-            }}
-          >
+        <div className="hidden lg:flex flex-row items-center gap-4 mt-10 md:order-none">
+          <h1 className="text-2xl lg:text-[2rem] font-bold m-0 leading-[1.5] flex items-center h-12">
             Total
           </h1>
-          <div
-            style={{
-              background: "#27A8F7",
-              color: "#fff",
-              fontWeight: "bold",
-              fontSize: "1.5rem",
-              borderRadius: "2rem",
-              padding: "0.5rem 2rem",
-              boxShadow: "0 2px 8px rgba(39,168,247,0.12)",
-              display: "flex",
-              alignItems: "center",
-              height: "3rem",
-            }}
-          >
+          <div className="bg-[#27A8F7] text-white font-bold text-xl rounded-full px-8 py-2 shadow-md flex items-center h-12">
             Rp10.000.000
           </div>
         </div>
       </div>
       {/* Pie chart, legend*/}
-      <div className="w-1/3 flex flex-col items-center gap-6">
+      <div className="w-full lg:w-1/3 flex flex-col items-center gap-6">
         <MultiPieChart
           segments={[
-            { label: "BBRI", percentage: 10, color: "#10B981" },
-            { label: "BBCA", percentage: 50, color: "#4F46E5" },
-            { label: "BMRI", percentage: 40, color: "#F59E42" },
+            { label: "Stock", percentage: 10, color: "#10B981" },
+            { label: "Crypto", percentage: 50, color: "#4F46E5" },
+            { label: "Bonds", percentage: 40, color: "#F59E42" },
           ]}
         />
         <div className="flex flex-col gap-2 mt-2">
           <div className="flex items-center gap-2">
-            <span
-              style={{
-                width: 16,
-                height: 16,
-                background: "#10B981",
-                borderRadius: 4,
-                display: "inline-block",
-              }}
-            ></span>
-            <span className="font-medium">BBRI</span>
+            <span className="w-4 h-4 bg-[#10B981] rounded-sm inline-block"></span>
+            <span className="font-medium">Stock</span>
             <span className="text-gray-500">10%</span>
           </div>
           <div className="flex items-center gap-2">
-            <span
-              style={{
-                width: 16,
-                height: 16,
-                background: "#4F46E5",
-                borderRadius: 4,
-                display: "inline-block",
-              }}
-            ></span>
-            <span className="font-medium">BBCA</span>
+            <span className="w-4 h-4 bg-[#4F46E5] rounded-sm inline-block"></span>
+            <span className="font-medium">Crypto</span>
             <span className="text-gray-500">50%</span>
           </div>
           <div className="flex items-center gap-2">
-            <span
-              style={{
-                width: 16,
-                height: 16,
-                background: "#F59E42",
-                borderRadius: 4,
-                display: "inline-block",
-              }}
-            ></span>
-            <span className="font-medium">BMRI</span>
+            <span className="w-4 h-4 bg-[#F59E42] rounded-sm inline-block"></span>
+            <span className="font-medium">Bonds</span>
             <span className="text-gray-500">40%</span>
+          </div>
+        </div>
+        <div className="flex lg:hidden flex-row items-center gap-4 mt-10 md:order-none">
+          <h1 className="text-2xl lg:text-[2rem] font-bold m-0 leading-[1.5] flex items-center h-12">
+            Total
+          </h1>
+          <div className="bg-[#27A8F7] text-white font-bold text-xl rounded-full px-8 py-2 shadow-md flex items-center h-12">
+            Rp10.000.000
           </div>
         </div>
       </div>

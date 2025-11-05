@@ -1,10 +1,10 @@
-import Navbar from "./components/navbar";
-import Hero from "./components/Hero";
-import Marquee from "./components/Marquee";
-import Update from "./components/Update";
-import Portfolio from "./components/Portfolio";
-import Pengurus from "./components/Pengurus/Pengurus";
-import Footer from "./components/Footer";
+import Navbar from "./components/Common/navbar";
+import Hero from "./components/Homepage/Hero/Hero";
+import Marquee from "./components/Homepage/Hero/Marquee";
+import Update from "./components/Homepage/Update/Update";
+import Portfolio from "./components/Homepage/Portfolio/Portfolio";
+import Pengurus from "./components/Homepage/Pengurus/Pengurus";
+import Footer from "./components/Common/Footer";
 
 export default function Home() {
   return (

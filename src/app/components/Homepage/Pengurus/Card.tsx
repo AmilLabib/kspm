@@ -4,16 +4,22 @@ interface CardProps {
   image: string;
   name: string;
   role: string;
+  size?: number; // width in px (container width)
 }
 
-const Card: React.FC<CardProps> = ({ image, name, role }) => {
+const Card: React.FC<CardProps> = ({ image, name, role, size = 180 }) => {
   const [flipped, setFlipped] = useState(false);
+
+  // Derived sizes from base 'size' prop
+  const containerWidth = size;
+  const containerHeight = Math.round((size / 3) * 4); // keep 3:4 ratio (180 -> 240)
+  const borderRadius = Math.round(size * 0.067); // ~12 for 180
 
   const containerStyle: React.CSSProperties = {
     position: "relative",
-    width: 180, // 75% of 240
-    height: 240, // 75% of 320
-    borderRadius: 12, // ~75% of 16
+    width: containerWidth,
+    height: containerHeight,
+    borderRadius: borderRadius,
     overflow: "hidden",
     boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
     background: "#fff",
@@ -37,7 +43,7 @@ const Card: React.FC<CardProps> = ({ image, name, role }) => {
     height: "100%",
     backfaceVisibility: "hidden",
     WebkitBackfaceVisibility: "hidden",
-    borderRadius: 16,
+    borderRadius: borderRadius,
     overflow: "hidden",
   };
 
@@ -56,7 +62,7 @@ const Card: React.FC<CardProps> = ({ image, name, role }) => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: 16,
+    padding: Math.round(size * 0.089),
   };
 
   const imageStyle: React.CSSProperties = {
@@ -88,14 +94,20 @@ const Card: React.FC<CardProps> = ({ image, name, role }) => {
               width: "100%",
               background: "rgba(0,0,0,0.6)",
               color: "#fff",
-              padding: "12px 9px 9px 9px",
+              padding: `${Math.round(size * 0.067)}px ${Math.round(
+                size * 0.05
+              )}px ${Math.round(size * 0.05)}px ${Math.round(size * 0.05)}px`,
               zIndex: 1,
-              borderBottomLeftRadius: 12,
-              borderBottomRightRadius: 12,
+              borderBottomLeftRadius: borderRadius,
+              borderBottomRightRadius: borderRadius,
             }}
           >
-            <div style={{ fontWeight: "bold", fontSize: 14 }}>{name}</div>
-            <div style={{ fontSize: 11 }}>{role}</div>
+            <div
+              style={{ fontWeight: "bold", fontSize: Math.round(size * 0.078) }}
+            >
+              {name}
+            </div>
+            <div style={{ fontSize: Math.round(size * 0.06) }}>{role}</div>
           </div>
         </div>
 

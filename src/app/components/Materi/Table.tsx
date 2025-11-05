@@ -7,6 +7,7 @@ export type FileRow = {
   tags?: string[];
   href?: string; // link to file for preview/download
   createdAt?: string; // optional YYYY-MM-DD date for filtering
+  author?: string;
 };
 
 type Props = {
@@ -41,9 +42,11 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
       <table className="w-full table-fixed text-left">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 w-3/5">Filename</th>
-            <th className="px-4 py-3 w-1/5">Tags</th>
-            <th className="px-4 py-3 w-1/5">Actions</th>
+            <th className="px-4 py-3 w-2/6">Filename</th>
+            <th className="px-4 py-3 w-1/6">Author</th>
+            <th className="px-4 py-3 w-1/6">Tags</th>
+            <th className="px-4 py-3 w-1/6">Created At</th>
+            <th className="px-4 py-3 w-1/6">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -53,16 +56,9 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
                 <div className="text-sm font-medium text-gray-900">
                   {r.filename}
                 </div>
-                {r.href ? (
-                  <a
-                    href={r.href}
-                    className="text-xs text-blue-600"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open link
-                  </a>
-                ) : null}
+              </td>
+              <td className="px-4 py-3">
+                <div className="text-sm text-gray-800">{r.author || "-"}</div>
               </td>
               <td className="px-4 py-3">
                 <div className="flex flex-wrap gap-2 max-w-[220px]">
@@ -74,6 +70,11 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
                       {t}
                     </span>
                   ))}
+                </div>
+              </td>
+              <td className="px-4 py-3">
+                <div className="text-sm text-gray-700">
+                  {r.createdAt || "-"}
                 </div>
               </td>
               <td className="px-4 py-3">
