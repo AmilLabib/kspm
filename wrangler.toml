@@ -1,0 +1,10 @@
+name = "kspmpknstan"
+main = ".vercel/output/static/_worker.js"
+compatibility_date = "2026-02-17"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = ".vercel/output/static"
+
+[build]
+command = "npm run cf:build"
