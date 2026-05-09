@@ -2,6 +2,7 @@ import Navbar from "./components/Common/navbar";
 import Hero from "./components/Homepage/Hero/Hero";
 import Marquee from "./components/Homepage/Hero/Marquee";
 import Update from "./components/Homepage/Update/Update";
+import InfoLomba from "./components/Homepage/InfoLomba/InfoLomba";
 import Pengurus from "./components/Homepage/Pengurus/Pengurus";
 import News from "./components/Homepage/News/News";
 import Footer from "./components/Common/Footer";
@@ -20,6 +21,9 @@ export default function Home() {
         <Marquee />
       </div>
       <div className="flex flex-col gap-10">
+        <section className={sectionClass}>
+          <InfoLomba />
+        </section>
         <section className={sectionClass}>
           <Update />
         </section>

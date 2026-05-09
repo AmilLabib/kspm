@@ -5,16 +5,11 @@ import { BookOpen, CalendarDays, LineChart } from "lucide-react";
 
 export default function Update() {
   const STATIC_POSTS = [
-    "https://www.instagram.com/p/DNAOQrmyPM2/",
-    "https://www.instagram.com/p/DM-b7Ypybco/",
-    "https://www.instagram.com/p/DM5UAeByXRe/",
-    "https://www.instagram.com/p/DM2iTSsS_1a/",
-    "https://www.instagram.com/p/DMsYGeRSM6P/",
-    "https://www.instagram.com/p/DMaOn52yY_N/",
-    "https://www.instagram.com/p/DMINgdzy5D1/",
-    "https://www.instagram.com/p/DLwsCxiSIC1/",
-    "https://www.instagram.com/p/DKhgvrHzFcY/",
-    "https://www.instagram.com/p/DKZDffsTqOc/",
+    "https://www.instagram.com/p/DXTAXE6j2bI/",
+    "https://www.instagram.com/p/DXW2luvlMxi/",
+    "https://www.instagram.com/p/DX-_3TQGQWY/",
+    "https://www.instagram.com/p/DW0J2MRk4D4/",
+    "https://www.instagram.com/p/DHpgc8ayuJm/",
   ];
 
   const [posts, setPosts] = useState<string[]>(STATIC_POSTS.slice(0, 9));
@@ -77,7 +72,7 @@ export default function Update() {
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold mb-6 text-center">
-        <span className="text-[#23A6F0]">KSPM</span> Update
+        <span className="text-[#23A6F0]">Info</span> Lomba
       </h2>
       <div className="relative w-full min-h-[400px] flex items-center">
         {/* Left Arrow */}
