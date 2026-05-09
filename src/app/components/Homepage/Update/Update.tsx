@@ -38,7 +38,14 @@ export default function Update() {
   ];
 
   const [active, setActive] = useState(0);
-  const GROUP_SIZE = 3;
+  const [groupSize, setGroupSize] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => setGroupSize(window.innerWidth < 768 ? 1 : 3);
+    handleResize(); // set initial value
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // fetch latest posts from server-side Instagram endpoint
   useEffect(() => {
@@ -48,6 +55,7 @@ export default function Update() {
       .then((data) => {
         if (!mounted) return;
         if (Array.isArray(data?.posts) && data.posts.length > 0) {
+          // If we want up to 9 posts, let's keep the existing slice(0, 7) or whatever was there
           setPosts(data.posts.slice(0, 7));
           setActive(0);
         }
@@ -60,10 +68,10 @@ export default function Update() {
     };
   }, []);
 
-  // build slides by chunking posts into groups of GROUP_SIZE
+  // build slides by chunking posts into groups of groupSize
   const slides: string[][] = [];
-  for (let i = 0; i < posts.length; i += GROUP_SIZE) {
-    slides.push(posts.slice(i, i + GROUP_SIZE));
+  for (let i = 0; i < posts.length; i += groupSize) {
+    slides.push(posts.slice(i, i + groupSize));
   }
 
   // auto-advance per slide
@@ -82,7 +90,7 @@ export default function Update() {
       return;
     }
     if (active >= slides.length) setActive(0);
-  }, [slides.length]);
+  }, [slides.length, active]);
 
   return (
     <div className="w-full">
@@ -111,7 +119,7 @@ export default function Update() {
           >
             {slides.map((group, sIdx) => (
               <div key={sIdx} className="min-w-full px-1">
-                <div className="grid grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   {group.map((url, idx) => (
                     <div
                       key={idx}
@@ -123,7 +131,7 @@ export default function Update() {
                             .split("/p/")[1]
                             .replace("/", "")}/embed`}
                           className="w-full h-full border-0"
-                          title={`Instagram post ${sIdx * GROUP_SIZE + idx + 1}`}
+                          title={`Instagram post ${sIdx * groupSize + idx + 1}`}
                           scrolling="no"
                           referrerPolicy="no-referrer"
                         />
@@ -139,8 +147,8 @@ export default function Update() {
                       </a>
                     </div>
                   ))}
-                  {group.length < GROUP_SIZE &&
-                    Array.from({ length: GROUP_SIZE - group.length }).map(
+                  {group.length < groupSize &&
+                    Array.from({ length: groupSize - group.length }).map(
                       (_, fillerIdx) => (
                         <div
                           key={`filler-${fillerIdx}`}
