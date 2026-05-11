@@ -29,16 +29,7 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Cloudflare Workers
-
-The project ships with a Wrangler configuration and helper scripts so it can run on Cloudflare's Workers runtime via `@cloudflare/next-on-pages`:
-
-1. Authenticate once with Cloudflare: `npx wrangler login`.
-2. Build the Worker bundle and static assets: `npm run cf:build` (wraps `@cloudflare/next-on-pages`).
-3. Preview locally: `npm run cf:dev`, which runs `wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat` against the generated output for a workerd-accurate test loop.[¹](https://github.com/cloudflare/next-on-pages/tree/main/packages/next-on-pages#recommended-development-workflow)
-4. Deploy to Workers: `npm run cf:deploy` (rebuilds and runs `wrangler deploy` using the settings in `wrangler.toml`).
-
-The `wrangler.toml` produced for this repo already sets `compatibility_date`, enables `nodejs_compat`, and points at the generated `_worker.js` plus static asset bucket under `.vercel/output/static`. Adjust bindings (KV, R2, secrets, etc.) in that file as you adopt Cloudflare services.
+<!-- Cloudflare Workers support removed from this repository. Use Vercel or another platform to deploy this Next.js app. -->
 
 ## Deploy on Vercel
 
