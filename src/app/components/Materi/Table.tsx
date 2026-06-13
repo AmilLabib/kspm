@@ -1,13 +1,17 @@
 "use client";
 import React, { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, FileText, Eye, Download } from "lucide-react";
 
 export type FileRow = {
   id: string;
   filename: string;
   tags?: string[];
-  href?: string; // link to file for preview/download
-  createdAt?: string; // optional YYYY-MM-DD date for filtering
+  href?: string;
+  createdAt?: string;
   author?: string;
+  fileType?: string;
+  fileName?: string;
 };
 
 type Props = {
@@ -19,6 +23,7 @@ type Props = {
 export default function Table({ rows, onDownload, onPreview }: Props) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
   React.useEffect(() => {
     setPage(1);
   }, [rows, pageSize]);
@@ -37,81 +42,129 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
   const gotoPrev = () => setPage((p) => Math.max(1, p - 1));
   const gotoNext = () => setPage((p) => Math.min(totalPages, p + 1));
 
+  if (rows.length === 0) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="rounded-xl border border-gray-200 bg-white p-12 text-center shadow-lg"
+      >
+        <FileText size={48} className="mx-auto mb-3 text-gray-300" />
+        <p className="text-gray-500">Belum ada materi yang tersedia</p>
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-white w-full shadow-xl">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="rounded-xl border border-gray-200 bg-white w-full shadow-lg overflow-hidden"
+    >
       <table className="w-full table-fixed text-left">
-        <thead className="bg-gray-50">
+        <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
           <tr>
-            <th className="px-4 py-3 w-2/6">Filename</th>
-            <th className="px-4 py-3 w-1/6">Author</th>
-            <th className="px-4 py-3 w-1/6">Tags</th>
-            <th className="px-4 py-3 w-1/6">Created At</th>
-            <th className="px-4 py-3 w-1/6">Actions</th>
+            <th className="px-4 py-3.5 w-2/6 text-sm font-semibold text-gray-700">
+              Filename
+            </th>
+            <th className="px-4 py-3.5 w-1/6 text-sm font-semibold text-gray-700">
+              Author
+            </th>
+            <th className="px-4 py-3.5 w-1/6 text-sm font-semibold text-gray-700">
+              Tags
+            </th>
+            <th className="px-4 py-3.5 w-1/6 text-sm font-semibold text-gray-700">
+              Created At
+            </th>
+            <th className="px-4 py-3.5 w-1/6 text-sm font-semibold text-gray-700">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>
-          {sliced.map((r) => (
-            <tr key={r.id} className="border-t border-gray-300">
-              <td className="px-4 py-3">
-                <div className="text-sm font-medium text-gray-900">
-                  {r.filename}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="text-sm text-gray-800">{r.author || "-"}</div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="flex flex-wrap gap-2 max-w-[220px]">
-                  {(r.tags || []).map((t) => (
-                    <span
-                      key={t}
-                      className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700"
+          <AnimatePresence mode="popLayout">
+            {sliced.map((r, index) => (
+              <motion.tr
+                key={r.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ delay: index * 0.03, duration: 0.2 }}
+                className="border-t border-gray-100 hover:bg-blue-50/30 transition-colors"
+              >
+                <td className="px-4 py-3">
+                  <div className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                    <FileText size={14} className="text-blue-400 flex-shrink-0" />
+                    <span className="truncate">{r.filename}</span>
+                    {r.fileType && (
+                      <span className="text-[10px] uppercase font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded flex-shrink-0">
+                        {r.fileType}
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-sm text-gray-800">{r.author || "-"}</div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex flex-wrap gap-1 max-w-[220px]">
+                    {(r.tags || []).map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="text-sm text-gray-600">
+                    {r.createdAt || "-"}
+                  </div>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() =>
+                        onPreview
+                          ? onPreview(r)
+                          : r.href
+                          ? window.open(r.href, "_blank")
+                          : null
+                      }
+                      className="flex items-center gap-1 rounded-lg bg-blue-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-600 transition-colors cursor-pointer"
+                      type="button"
                     >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="text-sm text-gray-700">
-                  {r.createdAt || "-"}
-                </div>
-              </td>
-              <td className="px-4 py-3">
-                <div className="flex gap-2">
-                  <button
-                    onClick={() =>
-                      onPreview
-                        ? onPreview(r)
-                        : r.href
-                        ? window.open(r.href, "_blank")
-                        : null
-                    }
-                    className="rounded-md bg-blue-500 px-3 py-1 text-xs font-medium text-white hover:bg-blue-600"
-                    type="button"
-                  >
-                    Preview
-                  </button>
-                  <a
-                    href={r.href || "#"}
-                    download
-                    onClick={(e) => {
-                      if (!r.href) e.preventDefault();
-                      if (onDownload) onDownload(r);
-                    }}
-                    className="rounded-md bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 hover:bg-gray-200"
-                  >
-                    Download
-                  </a>
-                </div>
-              </td>
-            </tr>
-          ))}
+                      <Eye size={12} />
+                      Preview
+                    </motion.button>
+                    <motion.a
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      href={r.href || "#"}
+                      download
+                      onClick={(e) => {
+                        if (!r.href) e.preventDefault();
+                        if (onDownload) onDownload(r);
+                      }}
+                      className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
+                    >
+                      <Download size={12} />
+                      Download
+                    </motion.a>
+                  </div>
+                </td>
+              </motion.tr>
+            ))}
+          </AnimatePresence>
         </tbody>
       </table>
 
       {/* Pagination controls */}
-      <div className="flex items-center justify-between gap-4 px-4 py-3">
+      <div className="flex items-center justify-between gap-4 px-4 py-3 border-t border-gray-100 bg-gray-50/50">
         <div className="text-sm text-gray-600">
           Showing {total === 0 ? 0 : showFrom} - {total === 0 ? 0 : showTo} of{" "}
           {total}
@@ -125,7 +178,7 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
               setPageSize(Number(e.target.value));
               setPage(1);
             }}
-            className="rounded-md border border-gray-300 px-2 py-1 text-sm"
+            className="rounded-lg border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-blue-400 outline-none"
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
@@ -135,25 +188,31 @@ export default function Table({ rows, onDownload, onPreview }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={gotoPrev}
             disabled={page <= 1}
-            className="rounded-md px-3 py-1 text-sm font-medium bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+            className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
+            <ChevronLeft size={14} />
             Previous
-          </button>
-          <div className="text-sm text-gray-700">
-            Page {page} / {totalPages}
+          </motion.button>
+          <div className="text-sm text-gray-700 px-2">
+            {page} / {totalPages}
           </div>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={gotoNext}
             disabled={page >= totalPages}
-            className="rounded-md px-3 py-1 text-sm font-medium bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
+            className="flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium bg-white border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             Next
-          </button>
+            <ChevronRight size={14} />
+          </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
