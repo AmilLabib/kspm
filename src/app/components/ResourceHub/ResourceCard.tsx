@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowRight,
   BookOpen,
@@ -6,6 +8,7 @@ import {
   Globe,
 } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export type ResourceCategoryKey =
   | "market_insights"
@@ -31,6 +34,7 @@ export type ResourceItem = {
 
 interface ResourceCardProps {
   resource: ResourceItem;
+  index?: number;
 }
 
 const fileTypeMeta = {
@@ -57,7 +61,7 @@ const typeBadgeStyles: Record<ResourceTier, string> = {
   Competition: "bg-purple-500/10 text-purple-200 border border-purple-500/30",
 };
 
-export default function ResourceCard({ resource }: ResourceCardProps) {
+export default function ResourceCard({ resource, index = 0 }: ResourceCardProps) {
   const meta = fileTypeMeta[resource.fileType];
   const Icon = meta?.icon ?? BookOpen;
   const iconBg =
@@ -79,7 +83,13 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
   );
 
   return (
-    <article className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_20px_60px_rgba(2,6,23,0.35)] backdrop-blur">
+    <motion.article
+      className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6 text-white shadow-[0_20px_60px_rgba(2,6,23,0.35)] backdrop-blur"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+    >
       <div className="flex items-center justify-between gap-4">
         {visualElement}
         <div className="flex flex-col items-end gap-2 text-right">
@@ -126,6 +136,6 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
         {resource.ctaLabel}
         <ArrowRight className="h-4 w-4" />
       </Link>
-    </article>
+    </motion.article>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import Navbar from "../components/Common/navbar";
 import Footer from "../components/Common/Footer";
 import {
@@ -242,7 +243,12 @@ export default function CompetitionMappingPage() {
       <Navbar />
 
       <div className="flex-1 w-full max-w-[85vw] mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <motion.div
+          className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
               Competition Mapping
@@ -258,7 +264,7 @@ export default function CompetitionMappingPage() {
             <Plus className="w-5 h-5 mr-2" />
             Add Lomba
           </button>
-        </div>
+        </motion.div>
 
         {/* Search Bar */}
         <div className="mb-8 relative">
@@ -291,7 +297,7 @@ export default function CompetitionMappingPage() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {paginatedLombas.map((lomba) => {
+              {paginatedLombas.map((lomba, cardIndex) => {
                 const daysLeft = lomba.deadline
                   ? getDaysLeft(lomba.deadline)
                   : null;
@@ -299,8 +305,11 @@ export default function CompetitionMappingPage() {
                 const isFull = lomba.members.length >= lomba.maxMembers;
 
                 return (
-                  <div
+                  <motion.div
                     key={lomba.id}
+                    initial={{ opacity: 0, y: 25 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: cardIndex * 0.08 }}
                     className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col ${!isFull ? "cursor-pointer hover:shadow-md transition-shadow" : ""}`}
                     onClick={() => {
                       if (!isFull) openMemberModal(lomba.id);
@@ -414,7 +423,7 @@ export default function CompetitionMappingPage() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

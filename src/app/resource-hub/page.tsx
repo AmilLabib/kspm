@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
+import { motion } from "framer-motion";
 import Navbar from "../components/Common/navbar";
 import Footer from "../components/Common/Footer";
 import ResourceCard, {
@@ -161,7 +162,12 @@ export default function ResourceHubPage() {
       <Navbar />
       <main className="min-h-screen pb-20 pt-10">
         <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6">
-          <section className="relative overflow-hidden rounded-[2.75rem] border border-white/10 bg-gradient-to-br from-[#040c27] via-[#071943] to-[#050f27] px-6 py-16 text-center shadow-[0_30px_120px_rgba(4,12,39,0.8)]">
+          <motion.section
+            className="relative overflow-hidden rounded-[2.75rem] border border-white/10 bg-gradient-to-br from-[#040c27] via-[#071943] to-[#050f27] px-6 py-16 text-center shadow-[0_30px_120px_rgba(4,12,39,0.8)]"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <div className="pointer-events-none absolute inset-0 opacity-60" style={{
               backgroundImage:
                 "radial-gradient(circle at 20% 20%, rgba(56,189,248,0.35), transparent 45%), radial-gradient(circle at 80% 0%, rgba(129,140,248,0.25), transparent 35%)",
@@ -207,7 +213,7 @@ export default function ResourceHubPage() {
                 })}
               </div>
             </div>
-          </section>
+          </motion.section>
 
           {hasResults ? (
             sectionsWithResources.map((section) => (
@@ -230,8 +236,8 @@ export default function ResourceHubPage() {
 
                 {section.resources.length > 0 ? (
                   <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                    {section.resources.map((resource) => (
-                      <ResourceCard key={resource.id} resource={resource} />
+                    {section.resources.map((resource, index) => (
+                      <ResourceCard key={resource.id} resource={resource} index={index} />
                     ))}
                   </div>
                 ) : (

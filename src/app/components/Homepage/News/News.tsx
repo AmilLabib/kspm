@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 type SnipItem = {
   id: string;
@@ -13,12 +15,13 @@ export default function NewsCarousel() {
   const [items, setItems] = useState<SnipItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-50px" });
 
   useEffect(() => {
     let mounted = true;
     setLoading(true);
 
-    // Fetch ke API internal kita sendiri
     fetch("/api/snips")
       .then((r) => {
         if (!r.ok) throw new Error("Gagal memuat API internal");
@@ -29,7 +32,6 @@ export default function NewsCarousel() {
 
         if (data.error) throw new Error(data.error);
 
-        // Parse HTML dari API kita
         const parser = new DOMParser();
         const doc = parser.parseFromString(data.html, "text/html");
 
@@ -77,10 +79,15 @@ export default function NewsCarousel() {
   }, []);
 
   return (
-    <section className="w-full">
-      <h3 className="text-2xl font-bold mb-6 text-gray-800">
+    <section ref={sectionRef} className="w-full">
+      <motion.h3
+        className="text-2xl font-bold mb-6 text-gray-800"
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.5 }}
+      >
         Daily News by Stockbit Snips
-      </h3>
+      </motion.h3>
 
       {loading && (
         <div className="animate-pulse space-y-4">
@@ -93,13 +100,16 @@ export default function NewsCarousel() {
 
       {!loading && !error && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((it) => (
-            <a
+          {items.map((it, index) => (
+            <motion.a
               key={it.id}
               href={it.url}
               target="_blank"
               rel="noopener noreferrer"
               className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
             >
               <div className="relative h-48 overflow-hidden bg-gray-100">
                 {it.imageUrl ? (
@@ -123,7 +133,7 @@ export default function NewsCarousel() {
                   {it.title}
                 </h4>
               </div>
-            </a>
+            </motion.a>
           ))}
         </div>
       )}

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+import { motion } from "framer-motion";
 
 interface EventItem {
   id: string;
@@ -9,7 +10,7 @@ interface EventItem {
   time: string;
   location?: string;
   description?: string;
-  date: string; // ISO date string
+  date: string;
 }
 
 const sampleEvents: EventItem[] = [
@@ -84,7 +85,12 @@ export default function EventPage() {
   return (
     <main className="min-h-screen bg-white py-12">
       <div className="mx-auto max-w-5xl px-6">
-        <header className="mb-8 flex items-center justify-between">
+        <motion.header
+          className="mb-8 flex items-center justify-between"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <button
             onClick={() => setCurrentMonth((prev) => prev.subtract(1, "month"))}
             className="text-sm font-semibold text-blue-600"
@@ -100,10 +106,15 @@ export default function EventPage() {
           >
             Next &gt;
           </button>
-        </header>
+        </motion.header>
 
         <div className="grid gap-8 lg:grid-cols-2">
-          <section className="rounded-2xl border border-slate-200 p-4 shadow-sm">
+          <motion.section
+            className="rounded-2xl border border-slate-200 p-4 shadow-sm"
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             <div className="mb-3 grid grid-cols-7 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
               {dayNames.map((name) => (
                 <div key={name}>{name}</div>
@@ -133,9 +144,14 @@ export default function EventPage() {
                 );
               })}
             </div>
-          </section>
+          </motion.section>
 
-          <section className="rounded-2xl border border-slate-200 p-4 shadow-sm">
+          <motion.section
+            className="rounded-2xl border border-slate-200 p-4 shadow-sm"
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             <h2 className="mb-4 text-xl font-bold text-slate-900">
               Event {dayjs(selectedDate).format("DD MMM YYYY")}
             </h2>
@@ -145,10 +161,13 @@ export default function EventPage() {
                   Tidak ada event.
                 </div>
               ) : (
-                selectedEvents.map((evt) => (
-                  <div
+                selectedEvents.map((evt, index) => (
+                  <motion.div
                     key={evt.id}
                     className="rounded-xl border border-slate-200 p-4 shadow-sm"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.08 }}
                   >
                     <p className="text-sm text-slate-500">{evt.time}</p>
                     <p className="text-lg font-semibold text-slate-900">
@@ -162,11 +181,11 @@ export default function EventPage() {
                         {evt.description}
                       </p>
                     )}
-                  </div>
+                  </motion.div>
                 ))
               )}
             </div>
-          </section>
+          </motion.section>
         </div>
       </div>
     </main>
