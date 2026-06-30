@@ -1,10 +1,13 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = React.useState(false);
+  const [aboutDropdown, setAboutDropdown] = React.useState(false);
+  const [aboutMobileOpen, setAboutMobileOpen] = React.useState(false);
+  const dropdownTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +48,15 @@ const Navbar: React.FC = () => {
     router.push("/admin");
   };
 
+  const handleDropdownEnter = () => {
+    if (dropdownTimeout.current) clearTimeout(dropdownTimeout.current);
+    setAboutDropdown(true);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeout.current = setTimeout(() => setAboutDropdown(false), 150);
+  };
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -20 }}
@@ -81,15 +93,67 @@ const Navbar: React.FC = () => {
               Home
             </a>
 
-            <a
-              href="#pengurus"
-              onClick={(e) => scrollToId(e, "pengurus")}
-              className={`font-semibold ${
-                scrolled ? "text-white" : "text-[#737373]"
-              } hover:opacity-60`}
+            {/* About Us Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
             >
-              Pengurus
-            </a>
+              <button
+                className={`font-semibold flex items-center gap-1 ${
+                  scrolled ? "text-white" : "text-[#737373]"
+                } hover:opacity-60 cursor-pointer`}
+              >
+                About Us
+                <svg
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    aboutDropdown ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              <AnimatePresence>
+                {aboutDropdown && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50"
+                  >
+                    <a
+                      href="/about"
+                      className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#23A6F0] transition-colors"
+                    >
+                      <span className="block font-semibold">KSPM</span>
+                      <span className="text-xs text-gray-400">
+                        Deskripsi & Visi Misi
+                      </span>
+                    </a>
+                    <a
+                      href="/organisasi"
+                      className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-[#23A6F0] transition-colors border-t border-gray-50"
+                    >
+                      <span className="block font-semibold">
+                        Profil Organisasi
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        Struktur & Pengurus
+                      </span>
+                    </a>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <a
               href="/materi"
               className={`font-semibold ${
@@ -179,24 +243,54 @@ const Navbar: React.FC = () => {
           >
             Home
           </a>
-          <a
-            href="#portfolio"
-            onClick={(e) => handleNavClick(e, "portfolio")}
-            className={`block px-3 py-2 rounded-md font-medium ${
-              scrolled ? "text-white" : "text-gray-700"
-            }`}
-          >
-            Portfolio
-          </a>
-          <a
-            href="#pengurus"
-            onClick={(e) => handleNavClick(e, "pengurus")}
-            className={`block px-3 py-2 rounded-md font-medium ${
-              scrolled ? "text-white" : "text-gray-700"
-            }`}
-          >
-            Pengurus
-          </a>
+          {/* Mobile About Us dropdown */}
+          <div>
+            <button
+              onClick={() => setAboutMobileOpen((v) => !v)}
+              className={`w-full text-left flex items-center justify-between px-3 py-2 rounded-md font-medium ${
+                scrolled ? "text-white" : "text-gray-700"
+              } cursor-pointer`}
+            >
+              About Us
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  aboutMobileOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {aboutMobileOpen && (
+              <div className="pl-6 space-y-1">
+                <a
+                  href="/about"
+                  onClick={(e) => handleNavClick(e, undefined, "/about")}
+                  className={`block px-3 py-2 rounded-md text-sm ${
+                    scrolled ? "text-white/80" : "text-gray-600"
+                  }`}
+                >
+                  KSPM (Deskripsi & Visi Misi)
+                </a>
+                <a
+                  href="/organisasi"
+                  onClick={(e) => handleNavClick(e, undefined, "/organisasi")}
+                  className={`block px-3 py-2 rounded-md text-sm ${
+                    scrolled ? "text-white/80" : "text-gray-600"
+                  }`}
+                >
+                  Profil Organisasi
+                </a>
+              </div>
+            )}
+          </div>
           <a
             href="/materi"
             onClick={(e) => handleNavClick(e, undefined, "/materi")}

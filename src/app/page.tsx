@@ -1,9 +1,9 @@
 import Navbar from "./components/Common/navbar";
 import Hero from "./components/Homepage/Hero/Hero";
 import Marquee from "./components/Homepage/Hero/Marquee";
+import About from "./components/Homepage/About/About";
 import Update from "./components/Homepage/Update/Update";
 import InfoLomba from "./components/Homepage/InfoLomba/InfoLomba";
-import Pengurus from "./components/Homepage/Pengurus/Pengurus";
 import News from "./components/Homepage/News/News";
 import Footer from "./components/Common/Footer";
 import { Analytics } from "@vercel/analytics/next";
@@ -21,6 +21,9 @@ export default function Home() {
         <Marquee />
       </div>
       <div className="flex flex-col gap-10">
+        <section id="about" className={sectionClass}>
+          <About />
+        </section>
         <section className={sectionClass}>
           <InfoLomba />
         </section>
@@ -29,9 +32,6 @@ export default function Home() {
         </section>
         <section className={sectionClass}>
           <News />
-        </section>
-        <section id="pengurus" className={sectionClass}>
-          <Pengurus />
         </section>
         <section className={sectionClass}>
           <Footer />
